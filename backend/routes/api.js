@@ -77,10 +77,12 @@ router.post("/claim-points", async (req, res) => {
 router.get("/leaderboard", async (req, res) => {
   try {
     const users = await User.find().sort({ totalPoints: -1 });
+
     const leaderboard = users.map((user, index) => ({
       ...user._doc,
       rank: index + 1,
     }));
+
     res.json(leaderboard);
   } catch (error) {
     res.status(500).json({ error: error.message });

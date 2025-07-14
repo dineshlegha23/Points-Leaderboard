@@ -15,6 +15,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.get("/", (req, res) => {
+  res.status(200).json({ msg: "Welcome to homepage" });
+});
 app.use("/api", apiRoutes);
 
 const PORT = process.env.PORT || 5000;
