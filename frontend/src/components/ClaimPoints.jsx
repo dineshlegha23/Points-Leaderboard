@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function ClaimPoints({
   users,
   message,
@@ -5,6 +7,7 @@ function ClaimPoints({
   setSelectedUser,
   handleClaimPoints,
   fetchPointHistory,
+  isClaimPointsLoading,
 }) {
   return (
     <>
@@ -30,9 +33,16 @@ function ClaimPoints({
           </select>
           <button
             onClick={handleClaimPoints}
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition cursor-pointer"
+            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition cursor-pointer disabled:bg-gray-500"
+            disabled={isClaimPointsLoading}
           >
-            Claim Points
+            {isClaimPointsLoading ? (
+              <div className="animate-spin px-11 w-8 h-6 rounded-full">
+                <div className="bg-white w-2 h-2 rounded-full"></div>
+              </div>
+            ) : (
+              "Claim Points"
+            )}
           </button>
         </div>
         {message && <p className="mt-2 text-sm text-yellow-100">{message}</p>}

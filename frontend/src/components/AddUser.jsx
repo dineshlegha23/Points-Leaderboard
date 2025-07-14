@@ -45,10 +45,16 @@ function AddUser({ fetchUsers, fetchLeaderboard, setMessage }) {
           />
           <button
             onClick={handleAddUser}
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition cursor-pointer"
+            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition cursor-pointer disabled:bg-gray-500"
             disabled={isLoading}
           >
-            {isLoading ? "loading..." : "Add User"}
+            {isLoading ? (
+              <div className="animate-spin px-8 w-8 h-6 rounded-full">
+                <div className="bg-white w-2 h-2 rounded-full"></div>
+              </div>
+            ) : (
+              "Add User"
+            )}
           </button>
         </div>
         {error && <p className="text-red-500">{error}</p>}

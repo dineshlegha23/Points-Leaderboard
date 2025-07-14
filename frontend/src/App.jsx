@@ -11,6 +11,8 @@ function App() {
   const [pointHistory, setPointHistory] = useState([]);
   const [message, setMessage] = useState("");
   const [users, setUsers] = useState([]);
+  const [isClaimPointsLoading, setIsClaimPointsLoading] = useState(false);
+  const [isLeaderboardLoading, setIsLeaderboardLoading] = useState(false);
 
   // Fetch all users
   const fetchUsers = async () => {
@@ -27,12 +29,15 @@ function App() {
   // Fetch leaderboard
   const fetchLeaderboard = async () => {
     try {
+      setIsLeaderboardLoading(true);
       const response = await axios.get(
         `${import.meta.env.VITE_PROD_URL}/api/leaderboard`
       );
       setLeaderboard(response.data);
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
+    } finally {
+      setIsLeaderboardLoading(false);
     }
   };
 
@@ -55,6 +60,7 @@ function App() {
       return;
     }
     try {
+      setIsClaimPointsLoading(true);
       const response = await axios.post(
         `${import.meta.env.VITE_PROD_URL}/api/claim-points`,
         {
@@ -69,6 +75,8 @@ function App() {
     } catch (error) {
       setMessage("Error claiming points");
       console.error(error);
+    } finally {
+      setIsClaimPointsLoading(false);
     }
   };
 
@@ -99,10 +107,15 @@ function App() {
         setSelectedUser={setSelectedUser}
         handleClaimPoints={handleClaimPoints}
         fetchPointHistory={fetchPointHistory}
+        isClaimPointsLoading={isClaimPointsLoading}
       />
 
       {/* Leaderboard */}
-      <Leaderboard leaderboard={leaderboard} />
+      <Leaderboard
+        leaderboard={leaderboard}
+        isLeaderboardLoading={isLeaderboardLoading}
+        setIsLeaderboardLoading={setIsLeaderboardLoading}
+      />
 
       {/* Point History */}
       <PointsHistory pointHistory={pointHistory} />
