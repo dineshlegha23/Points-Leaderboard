@@ -6,12 +6,11 @@ import Leaderboard from "./components/Leaderboard";
 import PointsHistory from "./components/PointsHistory";
 
 function App() {
-  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
   const [pointHistory, setPointHistory] = useState([]);
-  const [newUserName, setNewUserName] = useState("");
   const [message, setMessage] = useState("");
+  const [users, setUsers] = useState([]);
 
   // Fetch all users
   const fetchUsers = async () => {
@@ -73,31 +72,6 @@ function App() {
     }
   };
 
-  // Handle add user
-  const handleAddUser = async () => {
-    if (!newUserName) {
-      setMessage("Please enter a user name");
-      return;
-    }
-    try {
-      await axios.post(`${import.meta.env.VITE_PROD_URL}/api/users`, {
-        name: newUserName,
-      });
-      setMessage("User added successfully");
-      setNewUserName("");
-      fetchUsers();
-      fetchLeaderboard();
-    } catch (error) {
-      setMessage("Error adding user");
-      console.error(error);
-    }
-  };
-
-  // Placeholder profile images (you can replace with actual URLs)
-  const getProfileImage = (index) => {
-    return `https://placehold.co/300x300/tomato/white?text=${index + 1}`;
-  };
-
   useEffect(() => {
     fetchLeaderboard();
     fetchUsers();
@@ -112,26 +86,23 @@ function App() {
 
       {/* Add User Form */}
       <AddUser
-        newUserName={newUserName}
-        handleAddUser={handleAddUser}
-        setNewUserName={setNewUserName}
+        fetchUsers={fetchUsers}
+        fetchLeaderboard={fetchLeaderboard}
+        setMessage={setMessage}
       />
 
       {/* User Selection and Claim Points */}
       <ClaimPoints
         message={message}
+        users={users}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
-        users={users}
         handleClaimPoints={handleClaimPoints}
         fetchPointHistory={fetchPointHistory}
       />
 
       {/* Leaderboard */}
-      <Leaderboard
-        leaderboard={leaderboard}
-        getProfileImage={getProfileImage}
-      />
+      <Leaderboard leaderboard={leaderboard} />
 
       {/* Point History */}
       <PointsHistory pointHistory={pointHistory} />

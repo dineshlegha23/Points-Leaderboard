@@ -1,8 +1,8 @@
 function ClaimPoints({
+  users,
   message,
   selectedUser,
   setSelectedUser,
-  users,
   handleClaimPoints,
   fetchPointHistory,
 }) {

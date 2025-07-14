@@ -1,7 +1,10 @@
-function Leaderboard({ leaderboard, getProfileImage }) {
+function Leaderboard({ leaderboard }) {
+  const getProfileImage = (index) => {
+    return `https://placehold.co/300x300/tomato/white?text=${index + 1}`;
+  };
+
   return (
     <>
-      {" "}
       <div className="mb-6 bg-white/10 rounded-lg p-4 shadow-lg">
         <h3 className="text-xl font-semibold mb-4 text-yellow-200">
           Leaderboard

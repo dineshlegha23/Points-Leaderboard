@@ -1,4 +1,34 @@
-function AddUser({ newUserName, handleAddUser, setNewUserName }) {
+import axios from "axios";
+import { useState } from "react";
+
+function AddUser({ fetchUsers, fetchLeaderboard, setMessage }) {
+  const [newUserName, setNewUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleAddUser = async () => {
+    if (!newUserName) {
+      setError("Please enter name");
+      return;
+    }
+    try {
+      setIsLoading(true);
+      await axios.post(`${import.meta.env.VITE_PROD_URL}/api/users`, {
+        name: newUserName,
+      });
+      setMessage("User added successfully");
+      setNewUserName("");
+      fetchUsers();
+      fetchLeaderboard();
+    } catch (error) {
+      setMessage("Error adding user");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+      setError("");
+    }
+  };
+
   return (
     <>
       <div className="mb-6 bg-white/10 rounded-lg p-4 shadow-lg">
@@ -16,10 +46,12 @@ function AddUser({ newUserName, handleAddUser, setNewUserName }) {
           <button
             onClick={handleAddUser}
             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition cursor-pointer"
+            disabled={isLoading}
           >
-            Add User
+            {isLoading ? "loading..." : "Add User"}
           </button>
         </div>
+        {error && <p className="text-red-500">{error}</p>}
       </div>
     </>
   );
